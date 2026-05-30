@@ -1,0 +1,80 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("POSTGRES_PRISMA_URL")
+  directUrl = env("POSTGRES_URL_NON_POOLING")
+}
+
+model User {
+  id           String   @id @default(uuid())
+  username     String   @unique
+  passwordHash String
+  role         String   @default("ADMIN") // "ADMIN" or "SUPERADMIN"
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  properties   Property[]
+}
+
+model Property {
+  id            String    @id @default(uuid())
+  nama_property String
+  group         String?
+  lebar         Float
+  panjang       Float
+  tingkat       Float
+  hadap         String    // Comma separated e.g., "Utara,Selatan"
+  tipe          String    // "Ruko" or "Villa"
+  price         BigInt
+  carport       Boolean   @default(false)
+  status        String    @default("in_stock") // "in_stock" or "sold_out"
+  siap          String    // "siap_huni", "siap_kosong", "siap_huni_renovasi"
+  maps_link     String?
+  kawasan       String    // Comma separated tags
+  unit          String?
+  
+  deletedAt     DateTime? // For Soft Delete
+
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  
+  created_by    String?
+  createdBy     User?     @relation(fields: [created_by], references: [id])
+}
+
+model LoginAttempt {
+  id          String    @id @default(uuid())
+  ip          String    @unique
+  attempts    Int       @default(0)
+  lockUntil   DateTime?
+  updatedAt   DateTime  @updatedAt
+}
+
+model AuditLog {
+  id          String   @id @default(uuid())
+  userId      String?  // ID of the user who made the change
+  username    String?  // Username for easier viewing
+  action      String   // CREATE, UPDATE, DELETE
+  entity      String   // e.g., Property
+  entityId    String
+  details     String   // JSON string of the changes
+  createdAt   DateTime @default(now())
+}
+
+model RateLimit {
+  id        String   @id @default(uuid())
+  ip        String
+  endpoint  String
+  count     Int      @default(1)
+  resetAt   DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([ip, endpoint])
+}
