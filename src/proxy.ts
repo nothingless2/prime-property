@@ -31,7 +31,7 @@ export default async function proxy(request: NextRequest) {
   }
 
   // Rate Limiting Logic
-  const ip = request.ip || request.headers.get('x-forwarded-for') || '127.0.0.1';
+  const ip = request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || '127.0.0.1';
   const pathname = request.nextUrl.pathname;
   const isAuthPath = pathname.startsWith('/agent/login') || pathname.startsWith('/api/auth');
   
