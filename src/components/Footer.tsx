@@ -8,24 +8,16 @@ export default function Footer() {
   return (
     <footer className="bg-primary-black text-gray-400 py-16">
       <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 flex flex-col lg:flex-row gap-12 sm:gap-16">
-        
+
         {/* Kolom 1: Informasi Kontak & Logo */}
         <div className="lg:w-1/3">
           <div className="mb-6">
-            <Image 
-              src="/logoprime.jpg" 
-              alt="Prime Property Logo" 
-              width={150} 
-              height={40} 
-              style={{ width: 'auto', height: '40px' }}
-              className="object-contain rounded-md" 
-              unoptimized 
-            />
+            <Image src="/logoprime.jpg" alt="Prime Property Logo" width={150} height={40} className="h-10 w-auto object-contain rounded-md" unoptimized />
           </div>
           <p className="text-sm leading-relaxed mb-8 text-gray-500 pr-4">
             Didedikasikan untuk menyediakan properti mewah yang dirancang dengan dedikasi, membangun nilai, dan memperkaya pengalaman hidup Anda.
           </p>
-          
+
           <div className="space-y-3">
             <div className="flex items-center gap-3">
               <Phone className="w-4 h-4 text-accent-gold" />
@@ -78,7 +70,7 @@ export default function Footer() {
       </div>
 
       <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 mt-16 pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center text-xs text-gray-600">
-        <p>&copy; 2024 Prime Property. Semua Hak Dilindungi.</p>
+        <p>&copy; 2026 Prime Property. Semua Hak Dilindungi.</p>
       </div>
     </footer>
   )

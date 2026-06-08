@@ -1,6 +1,5 @@
 import { Suspense } from 'react'
 import DashboardClient from './DashboardClient'
-import { getProperties } from '@/app/actions/property'
 
 import Link from 'next/link'
 import { Plus } from 'lucide-react'
@@ -12,16 +11,16 @@ export default async function DashboardPage(props: { searchParams: Promise<{ [ke
   const searchParams = await props.searchParams;
   const search = typeof searchParams.search === 'string' ? searchParams.search : ''
   const tipe = typeof searchParams.tipe === 'string' ? searchParams.tipe : ''
-  
+
   const session = await getSession()
   const isSuperadmin = session?.role === 'SUPERADMIN'
 
   return (
-    <div className="p-4 md:p-8 max-w-7xl mx-auto w-full min-w-0">
-      <div className="flex justify-between items-center mb-6 md:mb-8">
+    <div className="p-8 max-w-7xl mx-auto w-full">
+      <div className="flex justify-between items-center mb-8">
         <div>
           <h1 className="text-3xl font-bold text-primary-black">Daftar Properti</h1>
-          <p className="text-gray-500 mt-2">Kelola dan pantau portofolio properti Anda dengan mudah.</p>
+          <p className="text-gray-500 mt-2">Kelola dan pantau portofolio properti dengan mudah.</p>
         </div>
       </div>
 
@@ -34,11 +33,7 @@ export default async function DashboardPage(props: { searchParams: Promise<{ [ke
       )}
 
       <Suspense fallback={<div className="text-center py-10">Memuat data...</div>}>
-        <DashboardClient 
-          initialSearch={search} 
-          initialTipe={tipe} 
-          initialData={await getProperties('', '') as any} 
-        />
+        <DashboardClient initialSearch={search} initialTipe={tipe} />
       </Suspense>
     </div>
   )
