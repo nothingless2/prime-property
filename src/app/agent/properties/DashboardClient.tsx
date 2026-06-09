@@ -51,19 +51,19 @@ const SIAP_OPTIONS = [
   { label: 'Siap Huni Renovasi', value: 'siap_huni_renovasi' },
 ]
 
-export default function DashboardClient({ 
-  initialSearch, 
+export default function DashboardClient({
+  initialSearch,
   initialTipe,
   initialData
-}: { 
-  initialSearch?: string, 
+}: {
+  initialSearch?: string,
   initialTipe?: string,
   initialData: PropertyData[]
 }) {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
-  
+
   const [data, setData] = useState<PropertyData[]>(initialData || [])
   const [loading, setLoading] = useState(false)
   const [role, setRole] = useState<string | null>(null)
@@ -81,7 +81,7 @@ export default function DashboardClient({
   useEffect(() => {
     getCurrentRole().then((role: any) => setRole(role as string | null))
   }, [])
-  
+
   // Handle success Toast from query param
   useEffect(() => {
     if (searchParams.get('success') === 'true') {
@@ -92,16 +92,16 @@ export default function DashboardClient({
       router.replace(`${pathname}?${current.toString()}`, { scroll: false })
     }
   }, [searchParams, pathname, router])
-  
+
   // Filter States
   const [search, setSearch] = useState(initialSearch || '')
   const [tipe, setTipe] = useState(initialTipe || '')
   const [status, setStatus] = useState(searchParams.get('status') || '')
-  
+
   const [kawasan, setKawasan] = useState<string[]>(searchParams.get('kawasan') ? searchParams.get('kawasan')!.split(',') : [])
   const [hadap, setHadap] = useState<string[]>(searchParams.get('hadap') ? searchParams.get('hadap')!.split(',') : [])
   const [siap, setSiap] = useState<string[]>(searchParams.get('siap') ? searchParams.get('siap')!.split(',') : [])
-  
+
   const [lebarMin, setLebarMin] = useState(searchParams.get('lebarMin') || '')
   const [hargaMax, setHargaMax] = useState(searchParams.get('hargaMax') || '')
   const [carport, setCarport] = useState(searchParams.get('carport') || '')
@@ -128,7 +128,7 @@ export default function DashboardClient({
   useEffect(() => {
     const handler = setTimeout(() => {
       const current = new URLSearchParams()
-      
+
       if (search) current.set('search', search)
       if (tipe) current.set('tipe', tipe)
       if (status) current.set('status', status)
@@ -141,7 +141,7 @@ export default function DashboardClient({
 
       const searchStr = current.toString()
       const query = searchStr ? `?${searchStr}` : ''
-      
+
       router.push(`${pathname}${query}`, { scroll: false })
       setPage(1) // Reset page on filter change
     }, 300)
@@ -156,9 +156,9 @@ export default function DashboardClient({
     // Search text
     if (search) {
       const q = search.toLowerCase()
-      result = result.filter(p => 
-        p.nama_property.toLowerCase().includes(q) || 
-        (p.group && p.group.toLowerCase().includes(q)) || 
+      result = result.filter(p =>
+        p.nama_property.toLowerCase().includes(q) ||
+        (p.group && p.group.toLowerCase().includes(q)) ||
         p.kawasan.toLowerCase().includes(q)
       )
     }
@@ -168,7 +168,7 @@ export default function DashboardClient({
     if (kawasan.length) result = result.filter(p => kawasan.some(k => p.kawasan.toLowerCase().includes(k.toLowerCase())))
     if (hadap.length) result = result.filter(p => hadap.some(h => p.hadap.toLowerCase().includes(h.toLowerCase())))
     if (siap.length) result = result.filter(p => siap.includes(p.siap))
-    
+
     if (lebarMin) result = result.filter(p => p.lebar >= parseFloat(lebarMin))
     if (hargaMax) result = result.filter(p => Number(p.price) <= Number(hargaMax))
     if (carport) result = result.filter(p => p.carport === (carport === 'true'))
@@ -263,16 +263,16 @@ export default function DashboardClient({
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
               <Search className="h-4 w-4" />
             </div>
-            <input 
-              type="text" 
+            <input
+              type="text"
               aria-label="Cari nama properti atau lokasi"
-              placeholder="Cari nama properti, kawasan..." 
+              placeholder="Cari nama properti, kawasan..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-md text-sm focus:outline-none focus:border-accent-gold transition"
             />
           </div>
-          <button 
+          <button
             onClick={() => {
               setSearch(''); setTipe(''); setStatus(''); setKawasan([]); setHadap([]); setSiap([]); setLebarMin(''); setHargaMax(''); setCarport('');
             }}
@@ -287,16 +287,16 @@ export default function DashboardClient({
           <MultiSelect options={KAWASAN_OPTIONS} selectedValues={kawasan} onChange={setKawasan} placeholder="Kawasan" />
           <MultiSelect options={HADAP_OPTIONS} selectedValues={hadap} onChange={setHadap} placeholder="Arah Hadap" />
           <MultiSelect options={SIAP_OPTIONS} selectedValues={siap} onChange={setSiap} placeholder="Kondisi" />
-          
+
           <input type="number" aria-label="Lebar minimal properti" placeholder="Lebar Min (m)" value={lebarMin} onChange={e => setLebarMin(e.target.value)} className="w-full px-3 py-1.5 border border-gray-200 rounded text-xs focus:outline-none focus:border-accent-gold" />
           <input type="number" aria-label="Harga maksimal properti" placeholder="Harga Max" value={hargaMax} onChange={e => setHargaMax(e.target.value)} className="w-full px-3 py-1.5 border border-gray-200 rounded text-xs focus:outline-none focus:border-accent-gold" />
-          
+
           <select value={tipe} onChange={e => setTipe(e.target.value)} className="w-full px-3 py-1.5 border border-gray-200 rounded text-xs focus:outline-none focus:border-accent-gold bg-white">
             <option value="">Tipe (Semua)</option>
             <option value="Ruko">Ruko</option>
             <option value="Villa">Villa</option>
           </select>
-          
+
           <select value={status} onChange={e => setStatus(e.target.value)} className="w-full px-3 py-1.5 border border-gray-200 rounded text-xs focus:outline-none focus:border-accent-gold bg-white">
             <option value="">Status (Semua)</option>
             <option value="in_stock">In Stock</option>
@@ -361,8 +361,8 @@ export default function DashboardClient({
               </tr>
             ) : (
               paginatedData.map((item, index) => (
-                <tr 
-                  key={item.id} 
+                <tr
+                  key={item.id}
                   onClick={() => setSelectedProperty(item)}
                   className={`transition text-sm cursor-pointer ${item.id === newId ? 'bg-green-50 animate-pulse' : 'hover:bg-gray-50'}`}
                 >
@@ -376,17 +376,15 @@ export default function DashboardClient({
                   <td className="px-4 py-3 font-bold text-primary-black">{formatRupiah(item.price)}</td>
                   <td className="px-4 py-3 text-gray-600">{item.carport ? 'Ya' : 'Tidak'}</td>
                   <td className="px-4 py-3">
-                    <span className={`inline-block px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider ${
-                      item.status === 'in_stock' ? 'bg-green-100 text-green-800' : 'bg-[#B33A3A] text-white'
-                    }`}>
+                    <span className={`inline-block px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider ${item.status === 'in_stock' ? 'bg-green-100 text-green-800' : 'bg-[#B33A3A] text-white'
+                      }`}>
                       {item.status === 'in_stock' ? 'In Stock' : 'Sold Out'}
                     </span>
                   </td>
                   <td className="px-4 py-3">
-                    <span className={`inline-block px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider ${
-                      item.siap === 'siap_huni' ? 'bg-yellow-100 text-yellow-800' : 
-                      item.siap === 'siap_kosong' ? 'bg-purple-100 text-purple-800' : 'bg-orange-100 text-orange-800'
-                    }`}>
+                    <span className={`inline-block px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider ${item.siap === 'siap_huni' ? 'bg-yellow-100 text-yellow-800' :
+                        item.siap === 'siap_kosong' ? 'bg-purple-100 text-purple-800' : 'bg-orange-100 text-orange-800'
+                      }`}>
                       {item.siap.replace(/_/g, ' ')}
                     </span>
                   </td>
@@ -404,8 +402,8 @@ export default function DashboardClient({
       <div className="px-6 py-4 border-t border-gray-200 flex flex-col sm:flex-row items-center justify-between gap-4 bg-gray-50">
         <div className="flex items-center gap-2">
           <span className="text-xs text-gray-500">Tampilkan:</span>
-          <select 
-            value={pageSize} 
+          <select
+            value={pageSize}
             onChange={(e) => { setPageSize(Number(e.target.value)); setPage(1); }}
             className="border border-gray-200 rounded px-2 py-1 text-xs focus:outline-none focus:border-accent-gold"
           >
@@ -417,9 +415,9 @@ export default function DashboardClient({
             Total {totalItems} properti
           </span>
         </div>
-        
+
         <div className="flex items-center gap-2">
-          <button 
+          <button
             onClick={() => setPage(p => Math.max(1, p - 1))}
             disabled={page === 1}
             className="p-1 rounded border border-gray-200 text-gray-500 hover:bg-gray-100 disabled:opacity-50 disabled:hover:bg-transparent transition"
@@ -429,7 +427,7 @@ export default function DashboardClient({
           <span className="text-xs font-medium text-gray-600 mx-2">
             Halaman {page} dari {totalPages || 1}
           </span>
-          <button 
+          <button
             onClick={() => setPage(p => Math.min(totalPages, p + 1))}
             disabled={page === totalPages || totalPages === 0}
             className="p-1 rounded border border-gray-200 text-gray-500 hover:bg-gray-100 disabled:opacity-50 disabled:hover:bg-transparent transition"
@@ -448,10 +446,10 @@ export default function DashboardClient({
         onDelete={handleDelete}
       />
 
-      <Toast 
-        message="Properti berhasil ditambahkan!" 
-        isVisible={showToast} 
-        onClose={() => setShowToast(false)} 
+      <Toast
+        message="Properti berhasil ditambahkan!"
+        isVisible={showToast}
+        onClose={() => setShowToast(false)}
       />
     </div>
   )

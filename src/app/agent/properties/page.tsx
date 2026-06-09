@@ -4,6 +4,7 @@ import DashboardClient from './DashboardClient'
 import Link from 'next/link'
 import { Plus } from 'lucide-react'
 import { getSession } from '@/lib/auth'
+import { getProperties } from '@/app/actions/property'
 
 export const dynamic = 'force-dynamic'
 
@@ -11,6 +12,8 @@ export default async function DashboardPage(props: { searchParams: Promise<{ [ke
   const searchParams = await props.searchParams;
   const search = typeof searchParams.search === 'string' ? searchParams.search : ''
   const tipe = typeof searchParams.tipe === 'string' ? searchParams.tipe : ''
+
+  const propertiesData = await getProperties(search, tipe)
 
   const session = await getSession()
   const isSuperadmin = session?.role === 'SUPERADMIN'
@@ -33,7 +36,7 @@ export default async function DashboardPage(props: { searchParams: Promise<{ [ke
       )}
 
       <Suspense fallback={<div className="text-center py-10">Memuat data...</div>}>
-        <DashboardClient initialSearch={search} initialTipe={tipe} />
+        <DashboardClient initialSearch={search} initialTipe={tipe} initialData={propertiesData} />
       </Suspense>
     </div>
   )
