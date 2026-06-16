@@ -43,11 +43,11 @@ export default function Navbar() {
           </div>
 
           {/* Desktop Login Button */}
-          <div className="hidden md:flex">
+          {/* <div className="hidden md:flex">
             <Link href="/agent/login" className="bg-primary-black text-neutral-white hover:bg-gray-800 transition px-6 py-2.5 rounded-full text-sm font-bold tracking-wide shadow-md hover:shadow-lg">
               Login Agent
             </Link>
-          </div>
+          </div> */}
 
           {/* Mobile Menu Button */}
           <div className="flex md:hidden">
