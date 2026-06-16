@@ -83,7 +83,7 @@ export default function Navbar() {
                 {link.name}
               </Link>
             ))}
-            <div className="mt-6 px-3">
+            {/* <div className="mt-6 px-3">
               <Link 
                 href="/agent/login" 
                 onClick={() => setIsMobileMenuOpen(false)}
@@ -91,7 +91,7 @@ export default function Navbar() {
               >
                 Login Agent
               </Link>
-            </div>
+            </div> */}
           </div>
         </div>
       )}
